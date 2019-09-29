@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace HW4f
     {
         public class Vertex
         {
-            public int id { get; private set; }
+            public int id { get; set; }
             public Vertex(int id)
             {
                 this.id = id;
@@ -80,7 +81,45 @@ namespace HW4f
             //       https://en.wikipedia.org/wiki/Shortest_Path_Faster_Algorithm
             // Valor: 5 puntos
             // Complejidad esperada: la indicada en Wikipedia
+            Queue<int> verticesQueue = new Queue<int>();
+            Path path = new Path();
+            int[] D = new int [vertices.Count];
+//            for (int u = 0; u < D.Length; u++)
+//            {
+//                D[u] = (u == src ? 0 : Int32.MaxValue);
+//
+//            }
 
+            foreach (Vertex v in  vertices)
+            {
+                if (v.id !=  src)
+                {
+                    D[v.id] = Int32.MaxValue; 
+                }
+            }
+
+            D[src] = 0;
+            verticesQueue.Enqueue(src);
+            while (verticesQueue.Count > 0)
+            {
+                int u = verticesQueue.Peek();
+                path.start.id = u;
+                path.end.id = dest;
+                verticesQueue.Dequeue();
+                foreach (Edge edge in edges)
+                {
+                    Vertex v = edge.v;
+                    if (D[u] + edge.weight < D[v.id])
+                    {
+                        D[v.id] = D[u] + edge.weight;
+                        if (!verticesQueue.Contains(v.id))
+                        {
+                            verticesQueue.Enqueue(v.id);
+                        }
+                    }
+
+                }
+            }
             return null;
         }
     }
